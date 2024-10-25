@@ -10,11 +10,11 @@ fun HttpException.mapToAPIError(): APIError {
         val errorBody = this.response()?.errorBody()?.string()
         val errorResponse = Gson().fromJson(errorBody, Response::class.java)
         val error = APIError(message = errorResponse.message ?: "Unknown error", code = errorResponse.responseCode)
-        AppLogger.logE("com.offeright.android.data.model.base.APIError: $error")
+        AppLogger.logE("APIError: $error")
         return error
     } catch (e: Exception) {
         val error = APIError(message = "Unknown error")
-        AppLogger.logE("com.offeright.android.data.model.base.APIError: $e")
+        AppLogger.logE("APIError: $e")
         return error
     }
 }
@@ -23,11 +23,11 @@ fun Exception.mapToAPIError(): APIError {
     try {
         val message = this.message ?: "Unknown error"
         val error = APIError(message = message)
-        AppLogger.logE("com.offeright.android.data.model.base.APIError: $error")
+        AppLogger.logE("APIError: $error")
         return error
     } catch (e: Exception) {
         val error = APIError(message = "Unknown error")
-        AppLogger.logE("com.offeright.android.data.model.base.APIError: $e")
+        AppLogger.logE("APIError: $e")
         return error
     }
 }

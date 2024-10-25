@@ -18,11 +18,11 @@ class GetUserRepositoryImpl @Inject constructor(
     private val appDatabase: AppDatabase,
     private val networkService: NetworkService
 ): GetUserRepository {
-    override fun getLocalUser(): Flow<DataResult<User>> {
+    override fun getListUser(page: Int, size: Int): Flow<DataResult<List<User>>> {
         return flow {
             try {
-                val response = appDatabase.userDAO().getUsers().first()
-                emit(DataResult.Success(response.toModel()))
+                val response = networkService.getListUser(size, page)
+                emit(DataResult.Success(response.map { it.toModel() }))
             } catch (e: HttpException) {
                 emit(DataResult.Error(e.mapToAPIError()))
             } catch (e: Exception) {
@@ -31,17 +31,12 @@ class GetUserRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun fetchRemoteUser(): Flow<DataResult<UserDetail>> {
+    override fun getLocalUsers(page: Int, size: Int): Flow<DataResult<List<User>>> {
         return flow {
             try {
-                val response = networkService.getUserDetail()
-                if (response.errors == null) {
-                    emit(DataResult.Success(response.data?.toModel() ?: UserDetail()))
-                } else {
-                    val message = response.message ?: "Unknown error"
-                    val error = APIError(message = message, code = response.responseCode)
-                    emit(DataResult.Error(error))
-                }
+                val response = appDatabase.userDAO().getUsers(page, size)
+                val users = response.map { it.toModel() }
+                emit(DataResult.Success(users))
             } catch (e: HttpException) {
                 emit(DataResult.Error(e.mapToAPIError()))
             } catch (e: Exception) {

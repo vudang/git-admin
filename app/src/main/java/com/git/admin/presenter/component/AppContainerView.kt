@@ -24,7 +24,6 @@ fun AppContainerView(
     customTopBar: @Composable (() -> Unit)? = null,
     content: @Composable (PaddingValues) -> Unit
 ) {
-    val bottomPadding = if(isTablet()) Dimens.dp30 else Dimens.dp0
     Scaffold(
         modifier = modifier
             .fillMaxWidth()
@@ -37,14 +36,7 @@ fun AppContainerView(
             )
         }
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(it),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            content(it)
-        }
+        content(it)
     }
 }
 

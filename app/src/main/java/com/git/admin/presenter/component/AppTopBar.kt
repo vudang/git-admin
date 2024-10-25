@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,9 +22,13 @@ fun AppTopBar(
 ) {
     Row(
         modifier = modifier.padding(vertical = Dimens.dp16),
-        horizontalArrangement = Arrangement.spacedBy(Dimens.dp0),
+        horizontalArrangement = Arrangement.spacedBy(Dimens.dp16),
         verticalAlignment = Alignment.CenterVertically
     ) {
+        AppIcon(
+            modifier = Modifier.size(Dimens.dp24),
+            iconDrawable = R.drawable.ic_logo,
+        )
         AppText(
             text = R.string.app_name,
             color = AppColor.Black,

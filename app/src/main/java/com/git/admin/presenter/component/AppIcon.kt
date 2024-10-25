@@ -40,6 +40,6 @@ fun AppIcon(
 fun AppIconPreview() {
     AppIcon(
         modifier = Modifier.fillMaxWidth(),
-        iconDrawable =  R.drawable.ic_logo_extra_dark_phone,
+        iconDrawable =  R.drawable.ic_info,
     )
 }

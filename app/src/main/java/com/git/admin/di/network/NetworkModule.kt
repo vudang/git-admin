@@ -23,7 +23,7 @@ object NetworkModule{
     @Provides
     @Singleton
     fun provideAuthInterceptor(authenticatedStream: MutableAuthenticatedStream): AuthInterceptor {
-        return AuthInterceptor(token = { authenticatedStream.user?.accessToken })
+        return AuthInterceptor(token = { authenticatedStream.user?.type })
     }
 
     @Provides

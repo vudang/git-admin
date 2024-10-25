@@ -3,7 +3,9 @@ package com.git.admin.di.repository
 import com.git.admin.data.datasource.local.db.AppDatabase
 import com.git.admin.data.datasource.remote.NetworkService
 import com.git.admin.data.repository.auth.GetUserRepositoryImpl
+import com.git.admin.data.repository.auth.StoreUserRepositoryImpl
 import com.git.admin.domain.repository.auth.GetUserRepository
+import com.git.admin.domain.repository.auth.StoreUserRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -13,10 +15,16 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object AuthRepositoryModule {
+object UserRepositoryModule {
     @Provides
     @Singleton
     fun provideGetUserRepository(database: AppDatabase, networkService: NetworkService): GetUserRepository {
         return GetUserRepositoryImpl(database, networkService)
+    }
+
+    @Provides
+    @Singleton
+    fun provideStoreUserRepository(database: AppDatabase): StoreUserRepository {
+        return StoreUserRepositoryImpl(database)
     }
 }

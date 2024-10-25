@@ -39,17 +39,17 @@ android {
             dimension = "environment"
             applicationIdSuffix = ".dev"
             versionNameSuffix = "-dev"
-            buildConfigField("String", "API_BASE_URL", "\"https://api-dev.app.net/\"")
+            buildConfigField("String", "API_BASE_URL", "\"https://api.github.com\"")
         }
         create("staging") {
             dimension = "environment"
             applicationIdSuffix = ".staging"
             versionNameSuffix = "-staging"
-            buildConfigField("String", "API_BASE_URL", "\"https://api-staging.app.net\"")
+            buildConfigField("String", "API_BASE_URL", "\"https://api.github.com\"")
         }
         create("prod") {
             dimension = "environment"
-            buildConfigField("String", "API_BASE_URL", "\"https://api.app.net\"")
+            buildConfigField("String", "API_BASE_URL", "\"https://api.github.com\"")
         }
     }
     compileOptions {

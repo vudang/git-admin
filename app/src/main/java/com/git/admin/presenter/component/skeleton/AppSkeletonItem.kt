@@ -16,9 +16,9 @@ import com.git.admin.util.ScreenUtils.isTablet
 
 @Composable
 fun AppSkeletonItem(modifier: Modifier = Modifier) {
-    val mainHeight = if (isTablet()) Dimens.dp50 else Dimens.dp20
-    val secondaryHeight = if (isTablet()) Dimens.dp30 else Dimens.dp10
-    val spacing = if (isTablet()) Dimens.dp10 else Dimens.dp4
+    val mainHeight = Dimens.dp80
+    val secondaryHeight = Dimens.dp40
+    val spacing = Dimens.dp10
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(spacing)
@@ -40,7 +40,7 @@ fun AppSkeletonItem(modifier: Modifier = Modifier) {
     }
 }
 
-@Preview(showSystemUi = true, device = Devices.PIXEL_TABLET)
+@Preview(showSystemUi = true, device = Devices.PIXEL)
 @Composable
 private fun AppSkeletonPreview() {
     AppSkeletonItem()

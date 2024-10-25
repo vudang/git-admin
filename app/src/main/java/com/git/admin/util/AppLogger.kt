@@ -10,9 +10,9 @@ object AppLogger {
     private val localeID = Locale("in", "ID")
 
     fun logE(message: String) {
-        if (BuildConfig.DEBUG) Log.e("ERROR_OFFERIGHT", message)
+        if (BuildConfig.DEBUG) Log.e("ERROR", message)
     }
     fun logD(message: String) {
-        if (BuildConfig.DEBUG) Log.d("DEBUG_OFFERIGHT", message)
+        if (BuildConfig.DEBUG) Log.d("DEBUG", message)
     }
 }

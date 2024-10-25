@@ -27,9 +27,9 @@ fun AppLoadingIndicator(
         contentAlignment = Alignment.Center
     ) {
         CircularProgressIndicator(
-            color = AppColor.GreenDark,
+            color = AppColor.GrayLight,
             strokeWidth = Dimens.dp4,
-            trackColor = AppColor.GreenExtraLight
+            trackColor = AppColor.Gray
         )
     }
 }

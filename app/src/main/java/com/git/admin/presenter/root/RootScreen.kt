@@ -45,7 +45,6 @@ fun MainScreen (
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        AppIcon(iconDrawable = R.drawable.ic_launcher_foreground)
         when (uiState) {
             is UiState.Success -> {
                 navigateToHome()

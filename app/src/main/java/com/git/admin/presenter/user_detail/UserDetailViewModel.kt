@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.git.admin.domain.model.UiState
 import com.git.admin.domain.model.UserDetail
 import com.git.admin.domain.stream.authentication.MutableAuthenticatedStream
-import com.git.admin.domain.usecase.user.GetUserDetailUseCase
+import com.git.admin.domain.usecase.user.GetUsersUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -14,7 +14,7 @@ import javax.inject.Inject
 @HiltViewModel
 class UserDetailViewModel @Inject constructor(
     private val authenticatedStream: MutableAuthenticatedStream,
-    private val getUserDetailUseCase: GetUserDetailUseCase,
+    private val getUserDetailUseCase: GetUsersUseCase,
 ) : ViewModel() {
     private val _updateState = MutableStateFlow<UiState<Boolean>>(UiState.None)
     val updateState = _updateState
@@ -57,11 +57,7 @@ class UserDetailViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-            getUserDetailUseCase.execute(Unit).collect {
-                if (it is UiState.Success) {
-                    _user.value = it.data
-                }
-            }
+            // TODO: FIXME
         }
     }
 }
