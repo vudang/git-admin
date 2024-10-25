@@ -20,9 +20,8 @@ class StoreUserRepositoryImpl @Inject constructor(
     override fun storeUsers(users: List<User>): Flow<DataResult<Unit>> {
         return flow {
             try {
-                users.forEach {
-                    appDatabase.userDAO().insertUser(it.toStore())
-                }
+                val userStore = users.map { it.toStore() }
+                appDatabase.userDAO().insertUsers(userStore)
                 emit(DataResult.Success(Unit))
             } catch (e: HttpException) {
                 emit(DataResult.Error(e.mapToAPIError()))

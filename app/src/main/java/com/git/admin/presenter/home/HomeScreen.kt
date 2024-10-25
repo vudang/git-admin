@@ -12,9 +12,11 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -28,6 +30,11 @@ import com.git.admin.presenter.router.AppRoute
 import com.git.admin.presenter.router.AppRouter
 import com.git.admin.presenter.theme.AppColor
 import com.git.admin.util.Dimens
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.timeout
 
 @Composable
 fun HomeScreen(
@@ -36,6 +43,7 @@ fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val uiState by remember { viewModel.uiState }.collectAsState()
+    val userList by remember { viewModel.userList }.collectAsState()
 
     fun onUserClick(user: User) {
         router.push(AppRoute.USER_DETAIL)
@@ -50,12 +58,16 @@ fun HomeScreen(
             }
             is UiState.Success -> {
                 ListUsers(
-                    users = (uiState as UiState.Success<List<User>>).data,
+                    users = userList,
                     paddingValues = it
                 )
             }
+            is UiState.Error -> {
+                val error = (uiState as UiState.Error).errorMessage
+                EmptyView(message = error ?: "An error occurred")
+            }
             else -> {
-                EmptyView()
+                EmptyView(message = "No users found")
             }
         }
     }
@@ -67,24 +79,40 @@ private fun LoadingView() {
 }
 
 @Composable
-private fun EmptyView() {
+private fun EmptyView(message: String) {
     AppText(
-        text = R.string.empty,
+        modifier = Modifier.padding(Dimens.dp30),
+        rawText = message,
         size = Dimens.sp16,
         color = AppColor.Gray,
         weight = FontWeight.Medium
     )
 }
 
+@OptIn(FlowPreview::class)
 @Composable
-private fun ListUsers(users: List<User>, paddingValues: PaddingValues) {
+private fun ListUsers(
+    users: List<User>,
+    paddingValues: PaddingValues,
+    viewModel: HomeViewModel = hiltViewModel()
+) {
+    val listState = rememberLazyListState()
+    LaunchedEffect(listState) {
+        snapshotFlow { listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index }
+            .filter { it != null && it >= users.size - 1 } // Near the end of the list
+            .distinctUntilChanged()
+            .debounce(500)
+            .collect {
+                viewModel.loadMoreUsers()
+            }
+    }
+
     LazyColumn(
         modifier = Modifier.padding(paddingValues),
-        state = rememberLazyListState()
+        state = listState
     ) {
         items(
             users,
-            key = { user -> user.id ?: "" }
         ) { user ->
             UserCell(user = user)
         }

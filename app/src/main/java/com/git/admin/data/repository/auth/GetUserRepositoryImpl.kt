@@ -21,7 +21,8 @@ class GetUserRepositoryImpl @Inject constructor(
     override fun getListUser(page: Int, size: Int): Flow<DataResult<List<User>>> {
         return flow {
             try {
-                val response = networkService.getListUser(size, page)
+                val since = page * size
+                val response = networkService.getListUser(size, since)
                 emit(DataResult.Success(response.map { it.toModel() }))
             } catch (e: HttpException) {
                 emit(DataResult.Error(e.mapToAPIError()))

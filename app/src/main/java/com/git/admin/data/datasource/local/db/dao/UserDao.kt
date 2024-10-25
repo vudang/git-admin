@@ -12,7 +12,7 @@ import com.git.admin.data.datasource.local.db.entity.user.UserStore
 
 @Dao
 interface UserDao {
-    @Query("SELECT * FROM ${AppTable.USER} LIMIT :size OFFSET :size * (:page - 1)")
+    @Query("SELECT * FROM ${AppTable.USER} LIMIT :size OFFSET :size * :page")
     suspend fun getUsers(page: Int, size: Int): MutableList<UserStore>
 
     @Query("SELECT * FROM ${AppTable.USER} WHERE id=:id")
@@ -20,6 +20,9 @@ interface UserDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertUser(user: UserStore): Long
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertUsers(users: List<UserStore>)
 
     @Delete
     suspend fun deleteUser(user: UserStore): Int

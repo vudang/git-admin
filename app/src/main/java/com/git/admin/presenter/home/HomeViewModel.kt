@@ -23,22 +23,27 @@ class HomeViewModel @Inject constructor(
 
     private val _userList: MutableStateFlow<List<User>> = MutableStateFlow(emptyList())
     val userList: StateFlow<List<User>> = _userList
+    private val _pageSize = 20
 
     init {
+        _uiState.value = UiState.Loading
         fetchUserList()
     }
 
-    private fun fetchUserList(query: UserQuery = UserQuery(page = 1, size = 30)) {
-        _uiState.value = UiState.Loading
+    private fun fetchUserList(query: UserQuery = UserQuery(page = 0, size = _pageSize)) {
         viewModelScope.launch {
             getUsersUseCase.execute(query).collect {
                 _uiState.value = it
+                if (it is UiState.Success) {
+                    _userList.value += it.data
+                }
             }
         }
     }
 
     fun loadMoreUsers() {
-        val query = UserQuery(page = 2, size = 10)
+        val page = _userList.value.size / _pageSize
+        val query = UserQuery(page = page, size = _pageSize)
         fetchUserList(query)
     }
 }

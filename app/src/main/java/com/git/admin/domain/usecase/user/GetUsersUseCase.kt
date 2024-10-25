@@ -37,6 +37,7 @@ class GetUsersUseCase @Inject constructor(
      */
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun execute(params: UserQuery): Flow<UiState<List<User>>> {
+        AppLogger.logD("[GetUsersUseCase]: Fetching users at page: ${params.page}, size: ${params.size}")
         val localFlow = getUserRepository.getLocalUsers(params.page, params.size)
         val remoteFlow = getUserRepository.getListUser(params.page, params.size)
         return localFlow
