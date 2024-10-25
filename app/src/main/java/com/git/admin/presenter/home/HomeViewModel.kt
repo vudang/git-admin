@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.git.admin.domain.model.UiState
 import com.git.admin.domain.model.User
 import com.git.admin.domain.model.UserQuery
+import com.git.admin.domain.stream.user.MutableUserStream
 import com.git.admin.domain.usecase.user.GetUsersUseCase
 import com.git.admin.util.AppLogger
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,7 +16,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val getUsersUseCase: GetUsersUseCase
+    private val getUsersUseCase: GetUsersUseCase,
+    private val userStream: MutableUserStream
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<UiState<List<User>>> = MutableStateFlow(UiState.None)
@@ -45,5 +47,10 @@ class HomeViewModel @Inject constructor(
         val page = _userList.value.size / _pageSize
         val query = UserQuery(page = page, size = _pageSize)
         fetchUserList(query)
+    }
+
+    fun onSelectedUser(user: User) {
+        AppLogger.logD("Selected user: ${user.login}")
+        userStream.update(user)
     }
 }

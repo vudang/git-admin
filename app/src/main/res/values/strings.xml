@@ -3,7 +3,7 @@
     <string name="app_name">"Git Administrator"</string>
     <string name="close">"Close"</string>
     <string name="empty">""</string>
-    <string name="user_detail_title">"Your information"</string>
+    <string name="user_detail_title">"User Details"</string>
     <string name="user_detail_save_change">Save</string>
     <string name="signin">"Sign In"</string>
     <string name="signin_description">""</string>

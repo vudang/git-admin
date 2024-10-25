@@ -1,17 +1,58 @@
 package com.git.admin.domain.model
 
-data class UserDetail(
-    val id: Int? = null,
-    val firstName: String? = null,
-    val lastName: String? = null,
+class UserDetail(
+    login: String? = null,
+    id: Int? = null,
+    nodeId: String? = null,
+    avatarUrl: String? = null,
+    gravatarId: String? = null,
+    url: String? = null,
+    htmlUrl: String? = null,
+    followersUrl: String? = null,
+    followingUrl: String? = null,
+    gistsUrl: String? = null,
+    starredUrl: String? = null,
+    subscriptionsUrl: String? = null,
+    organizationsUrl: String? = null,
+    reposUrl: String? = null,
+    eventsUrl: String? = null,
+    receivedEventsUrl: String? = null,
+    type: String? = null,
+    userViewType: String? = null,
+    siteAdmin: Boolean? = null,
+
+    val name: String? = null,
+    val company: String? = null,
+    val blog: String? = null,
+    val location: String? = null,
     val email: String? = null,
-    val address: String? = null,
-    val countryCode: Int? = null,
-    val mobileNo: String? = null,
-    val profileImgUrl: String? = null,
-): BaseModel {
-    fun getFullName(): String {
-        val name = listOfNotNull(firstName, lastName).joinToString(" ")
-        return name
-    }
-}
+    val hireable: String? = null,
+    val bio: String? = null,
+    val twitterUsername: String? = null,
+    val publicRepos: Int? = null,
+    val publicGists: Int? = null,
+    val followers : Int? = null,
+    val following : Int? = null,
+    val createdAt: String? = null,
+    val updatedAt: String? = null
+): User(
+    login = login,
+    id = id,
+    nodeId = nodeId,
+    avatarUrl = avatarUrl,
+    gravatarId = gravatarId,
+    url = url,
+    htmlUrl = htmlUrl,
+    followersUrl = followersUrl,
+    followingUrl = followingUrl,
+    gistsUrl = gistsUrl,
+    starredUrl = starredUrl,
+    subscriptionsUrl = subscriptionsUrl,
+    organizationsUrl = organizationsUrl,
+    reposUrl = reposUrl,
+    eventsUrl = eventsUrl,
+    receivedEventsUrl = receivedEventsUrl,
+    type = type,
+    userViewType = userViewType,
+    siteAdmin = siteAdmin
+)

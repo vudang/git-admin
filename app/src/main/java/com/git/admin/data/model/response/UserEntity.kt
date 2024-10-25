@@ -5,7 +5,7 @@ import com.git.admin.data.model.base.BaseEntity
 import com.git.admin.domain.model.BaseModel
 import com.git.admin.domain.model.User
 
-// Help me define UserEntity model follow this JSON response and add @SerializedName annotation to map the JSON key to the model field
+// Define UserEntity model follow this JSON response and add @SerializedName annotation to map the JSON key to the model field
 // {
 //    "login": "defunkt",
 //    "id": 2,
@@ -28,7 +28,7 @@ import com.git.admin.domain.model.User
 //    "site_admin": false
 //  }
 
-data class UserEntity(
+open class UserEntity(
     @SerializedName("login")
     val login: String? = null,
     @SerializedName("id")

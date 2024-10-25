@@ -3,7 +3,8 @@ package com.git.admin.di.network
 import com.google.gson.GsonBuilder
 import com.git.admin.BuildConfig
 import com.git.admin.data.datasource.remote.NetworkService
-import com.git.admin.domain.stream.authentication.MutableAuthenticatedStream
+import com.git.admin.domain.stream.user.MutableUserStream
+import com.git.admin.domain.stream.user.UserStream
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,8 +23,8 @@ object NetworkModule{
 
     @Provides
     @Singleton
-    fun provideAuthInterceptor(authenticatedStream: MutableAuthenticatedStream): AuthInterceptor {
-        return AuthInterceptor(token = { authenticatedStream.user?.type })
+    fun provideAuthInterceptor(stream: MutableUserStream): AuthInterceptor {
+        return AuthInterceptor(token = { "" })
     }
 
     @Provides
@@ -38,7 +39,7 @@ object NetworkModule{
     fun provideOkHttpClient(logging: HttpLoggingInterceptor, authInterceptor: AuthInterceptor): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor(logging)
-            .addInterceptor(authInterceptor)
+            //.addInterceptor(authInterceptor)
             .build()
     }
 

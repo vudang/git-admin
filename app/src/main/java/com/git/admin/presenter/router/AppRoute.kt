@@ -8,7 +8,7 @@ enum class AppRoute {
     fun getName(): String {
         return when(this) {
             ROOT -> "root"
-            USER_DASHBOARD -> "user_dashboard"
+            USER_DASHBOARD -> "home"
             USER_DETAIL -> "user_detail"
         }
     }

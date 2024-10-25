@@ -2,7 +2,7 @@ package com.git.admin.domain.model
 
 import com.git.admin.data.datasource.local.db.entity.user.UserStore
 
-data class User(
+open class User(
     val login: String? = null,
     val id: Int? = null,
     val nodeId: String? = null,

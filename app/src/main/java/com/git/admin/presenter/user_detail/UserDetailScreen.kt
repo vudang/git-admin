@@ -22,6 +22,9 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.git.admin.R
+import com.git.admin.domain.model.UiState
+import com.git.admin.domain.model.UserDetail
+import com.git.admin.presenter.component.AppButtonIcon
 import com.git.admin.presenter.component.AppButtonRegular
 import com.git.admin.presenter.component.AppButtonStyle
 import com.git.admin.presenter.component.AppButtonText
@@ -31,6 +34,8 @@ import com.git.admin.presenter.component.AppText
 import com.git.admin.presenter.component.AppTextField
 import com.git.admin.presenter.component.AppTextFieldStyle
 import com.git.admin.presenter.component.ValidationRule
+import com.git.admin.presenter.component.skeleton.AppSkeletonItem
+import com.git.admin.presenter.component.skeleton.AppSkeletonList
 import com.git.admin.presenter.router.AppRouter
 import com.git.admin.presenter.theme.AppColor
 import com.git.admin.util.Dimens
@@ -38,121 +43,95 @@ import com.git.admin.util.Dimens
 @Composable
 fun UserDetailScreen(
     windowSize: WindowWidthSizeClass,
-    router: AppRouter
+    router: AppRouter,
+    viewModel: UserDetailViewModel = hiltViewModel()
 ) {
+    val uiState by remember { viewModel.uiState }.collectAsState()
+
+    fun goBack() {
+        router.pop()
+    }
+
     AppContainerView(
         modifier = Modifier.padding(),
+        customTopBar = { HeaderView(backPress = { goBack() }) }
     ) {
-        Column(
-            modifier = Modifier.verticalScroll(rememberScrollState()),
-        ) {
-            ContentView(closeClick = { router.pop() })
+        when (uiState) {
+            is UiState.Loading -> {
+                LoadingView()
+            }
+            is UiState.Error -> {
+                val error = (uiState as UiState.Error).errorMessage
+                EmptyView(message = error)
+            }
+            is UiState.Success -> {
+                val user = (uiState as UiState.Success).data
+                if (user is UserDetail) {
+                    ContentView(user)
+                }
+            }
+            else -> {
+                EmptyView(message = "No data found")
+            }
         }
     }
 }
 
 @Composable
-private fun ContentView(closeClick: () -> Unit) {
+private fun LoadingView() {
+    AppSkeletonItem()
+}
+
+@Composable
+private fun EmptyView(message: String) {
+    AppText(
+        modifier = Modifier.padding(Dimens.dp30),
+        rawText = message,
+        size = Dimens.sp16,
+        color = AppColor.Gray,
+        weight = FontWeight.Medium
+    )
+}
+
+
+@Composable
+private fun ContentView(user: UserDetail) {
     Column(
         modifier = Modifier
             .padding(horizontal = Dimens.dp20),
         verticalArrangement = Arrangement.spacedBy(Dimens.dp20),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        HeaderView()
-        NameView()
-        MailPhoneView()
-        BottomButtons(closeClick = closeClick)
+        AppText(
+            rawText = user.name,
+            color = AppColor.Black,
+            size = Dimens.sp24,
+            weight = FontWeight.ExtraBold
+        )
     }
 }
 
 @Composable
-private fun BottomButtons(
-    viewModel: UserDetailViewModel = hiltViewModel(),
-    closeClick: () -> Unit
-) {
-    val isDataChanged by remember { viewModel.isDataChanged }.collectAsState()
-
+private fun HeaderView(backPress: () -> Unit) {
     Row(
-        modifier = Modifier.padding(top = Dimens.dp20),
-        horizontalArrangement = Arrangement.spacedBy(Dimens.dp10),
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(Dimens.dp20)
     ) {
-        AppButtonRegular(
-            text = R.string.close,
-            style = AppButtonStyle.BORDER,
-            onClick = closeClick,
-            modifier = Modifier.weight(1f)
-        )
-        AppButtonRegular(
-            text = R.string.user_detail_save_change,
-            onClick = { viewModel.updateUserData() },
-            enable = isDataChanged,
-            modifier = Modifier.weight(1f)
+        AppButtonIcon(
+            iconDrawable = R.drawable.ic_back,
+            padding = Dimens.dp0,
+        ) {
+            backPress()
+        }
+        AppText(
+            text = R.string.user_detail_title,
+            size = Dimens.sp24,
+            color = AppColor.Dark,
+            weight = FontWeight.ExtraBold,
+            align = TextAlign.Center,
+            modifier = Modifier.padding(top = Dimens.dp20)
         )
     }
 }
 
-@Composable
-private fun HeaderView() {
-    AppText(
-        text = R.string.user_detail_title,
-        size = Dimens.sp24,
-        color = AppColor.Dark,
-        weight = FontWeight.ExtraBold,
-        align = TextAlign.Center,
-        modifier = Modifier.padding(top = Dimens.dp20)
-    )
-}
-
-@Composable
-private fun NameView(viewModel: UserDetailViewModel = hiltViewModel()) {
-    val user by remember { viewModel.user }.collectAsState()
-
-    AppTextField(
-        label = R.string.signup_first_name,
-        style = AppTextFieldStyle.BORDER,
-        initValue = user?.firstName,
-        validateRules = listOf(ValidationRule.REQUIRED),
-        onValueChange = { viewModel.validateFirstName(it) },
-    )
-    AppTextField(
-        label = R.string.signup_last_name,
-        style = AppTextFieldStyle.BORDER,
-        initValue = user?.lastName,
-        validateRules = listOf(ValidationRule.REQUIRED),
-        onValueChange = { viewModel.validateLastName(it) },
-    )
-}
-
-@Composable
-private fun MailPhoneView(viewModel: UserDetailViewModel = hiltViewModel()) {
-    val user by viewModel.user.collectAsState()
-
-    AppTextField(
-        label = R.string.signup_email,
-        style = AppTextFieldStyle.BORDER,
-        initValue = user?.email,
-        enable = false,
-        validateRules = listOf(ValidationRule.EMAIL, ValidationRule.REQUIRED),
-        keyboardType = KeyboardType.Email,
-        onValueChange = { },
-    )
-    AppTextField(
-        label = R.string.signup_mobile,
-        style = AppTextFieldStyle.BORDER,
-        initValue = user?.mobileNo,
-        validateRules = listOf(ValidationRule.PHONE, ValidationRule.REQUIRED),
-        keyboardType = KeyboardType.Number,
-        enable = false,
-        onValueChange = {  },
-    )
-
-    AppTextField(
-        label = R.string.signup_address,
-        style = AppTextFieldStyle.BORDER,
-        initValue = user?.address,
-        validateRules = listOf(ValidationRule.REQUIRED),
-        onValueChange = { viewModel.validateAddress(it) },
-        modifier = Modifier.padding(top = Dimens.dp20)
-    )
-}

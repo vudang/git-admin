@@ -1,4 +1,4 @@
-package com.git.admin.domain.repository.auth
+package com.git.admin.domain.repository.user
 
 import com.git.admin.data.model.response.DataResult
 import com.git.admin.domain.model.User

@@ -1,15 +1,11 @@
 package com.git.admin.presenter.home
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -20,7 +16,6 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.git.admin.R
 import com.git.admin.domain.model.UiState
 import com.git.admin.domain.model.User
 import com.git.admin.presenter.component.AppContainerView
@@ -34,7 +29,6 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.timeout
 
 @Composable
 fun HomeScreen(
@@ -45,7 +39,7 @@ fun HomeScreen(
     val uiState by remember { viewModel.uiState }.collectAsState()
     val userList by remember { viewModel.userList }.collectAsState()
 
-    fun onUserClick(user: User) {
+    fun navigateToUserDetail() {
         router.push(AppRoute.USER_DETAIL)
     }
 
@@ -59,7 +53,8 @@ fun HomeScreen(
             is UiState.Success -> {
                 ListUsers(
                     users = userList,
-                    paddingValues = it
+                    paddingValues = it,
+                    selectedUser = { navigateToUserDetail() }
                 )
             }
             is UiState.Error -> {
@@ -89,17 +84,27 @@ private fun EmptyView(message: String) {
     )
 }
 
+/**
+ * List of users Compose
+ * Display list of users
+ * Load more users when scrolled to bottom
+ *
+ * @param users List of users
+ * @param paddingValues PaddingValues
+ * @param viewModel HomeViewModel
+ */
 @OptIn(FlowPreview::class)
 @Composable
 private fun ListUsers(
     users: List<User>,
     paddingValues: PaddingValues,
+    selectedUser: () -> Unit = {},
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val listState = rememberLazyListState()
     LaunchedEffect(listState) {
         snapshotFlow { listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index }
-            .filter { it != null && it >= users.size - 1 } // Near the end of the list
+            .filter { it != null && it >= users.size - 1 }
             .distinctUntilChanged()
             .debounce(500)
             .collect {
@@ -114,7 +119,13 @@ private fun ListUsers(
         items(
             users,
         ) { user ->
-            UserCell(user = user)
+            UserCell(
+                user = user,
+                modifier = Modifier.clickable {
+                    viewModel.onSelectedUser(user)
+                    selectedUser()
+                }
+            )
         }
     }
 }

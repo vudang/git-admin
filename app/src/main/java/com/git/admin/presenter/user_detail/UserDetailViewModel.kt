@@ -3,61 +3,47 @@ package com.git.admin.presenter.user_detail
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.git.admin.domain.model.UiState
-import com.git.admin.domain.model.UserDetail
-import com.git.admin.domain.stream.authentication.MutableAuthenticatedStream
-import com.git.admin.domain.usecase.user.GetUsersUseCase
+import com.git.admin.domain.model.User
+import com.git.admin.domain.stream.user.MutableUserStream
+import com.git.admin.domain.stream.user.UserStream
+import com.git.admin.domain.usecase.user.GetUserDetailUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flatMapConcat
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class UserDetailViewModel @Inject constructor(
-    private val authenticatedStream: MutableAuthenticatedStream,
-    private val getUserDetailUseCase: GetUsersUseCase,
+    private val userStream: UserStream,
+    private val getUserDetailUseCase: GetUserDetailUseCase,
 ) : ViewModel() {
-    private val _updateState = MutableStateFlow<UiState<Boolean>>(UiState.None)
-    val updateState = _updateState
 
-    private val _user = MutableStateFlow<UserDetail?>(null)
-    val user = _user
-
-    private val _isDataChanged = MutableStateFlow(false)
-    val isDataChanged = _isDataChanged
+    private val _uiState = MutableStateFlow<UiState<User>>(UiState.None)
+    val uiState = _uiState
 
 
     init {
-        loadUser()
-        validateData()
+        fetchUserDetail()
     }
 
-    fun validateFirstName(firstName: String) {
-    }
-
-    fun validateLastName(lastName: String) {
-    }
-
-    fun validateAddress(address: String) {
-    }
-
-    fun updateUserData() {
-        _updateState.value = UiState.Loading
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private fun fetchUserDetail() {
         viewModelScope.launch {
-        }
-    }
-
-    private fun validateData() {
-        viewModelScope.launch {
-        }
-    }
-
-    private fun loadUser() {
-        authenticatedStream.userDetail?.let {
-            _user.value = it
-        }
-
-        viewModelScope.launch {
-            // TODO: FIXME
+            userStream.userFlow
+                .flatMapConcat { user ->
+                    if (user != null) {
+                        _uiState.value = UiState.Success(user)
+                        getUserDetailUseCase.execute(user)
+                    } else {
+                        flowOf(UiState.None)
+                    }
+                }
+                .collect {
+                    _uiState.value = it
+                }
         }
     }
 }
