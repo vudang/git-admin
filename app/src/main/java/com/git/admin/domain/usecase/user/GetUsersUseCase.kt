@@ -44,9 +44,8 @@ class GetUsersUseCase @Inject constructor(
      */
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun execute(params: UserQuery): Flow<UiState<List<User>>> {
-        AppLogger.logD("[GetUsersUseCase]: Fetching users at page: ${params.page}, size: ${params.size}")
-        val localFlow = getUserRepository.getLocalUsers(params.page, params.size)
-        val remoteFlow = getUserRepository.getListUser(params.page, params.size)
+        val localFlow = getUsersFromLocalDatabase(params)
+        val remoteFlow = getUsersFromRemote(params)
         return localFlow
             .flatMapConcat { dataResult ->
                 when (dataResult) {
@@ -69,6 +68,28 @@ class GetUsersUseCase @Inject constructor(
                 }
             }
             .map { res -> res.toUiState() }
+    }
+
+    /**
+     * Store list of users to local database
+     * @param users List of users to store
+     * @return Flow<DataResult<List<User>>> Flow of DataResult
+     * @see User
+     * @see UserQuery
+     */
+    private fun getUsersFromLocalDatabase(params: UserQuery): Flow<DataResult<List<User>>> {
+        return getUserRepository.getLocalUsers(params.page, params.size)
+    }
+
+    /**
+     * Fetch list of users from remote
+     * @param params UserQuery
+     * @return Flow<DataResult<List<User>>> Flow of DataResult
+     * @see User
+     * @see UserQuery
+     */
+    private fun getUsersFromRemote(params: UserQuery): Flow<DataResult<List<User>>> {
+        return getUserRepository.getRemoteUsers(params.page, params.size)
     }
 
     /**

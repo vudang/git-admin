@@ -133,9 +133,6 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
 
-    // PAYMENT
-    implementation(libs.stripe.android)
-
     // COMPOSE
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
@@ -173,6 +170,8 @@ dependencies {
 
     // UNIT TEST
     testImplementation(libs.junit)
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.mockito.kotlin)
     testImplementation (libs.kotlinx.coroutines.test)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -180,9 +179,4 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-
-    // PDF VIEWER & WEBVIEW
-    implementation(libs.coil.compose.v240)
-    implementation(libs.accompanist.webview)
-    implementation(libs.compose.webview)
 }

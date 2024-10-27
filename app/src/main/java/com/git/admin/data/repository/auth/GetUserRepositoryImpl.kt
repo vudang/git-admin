@@ -29,7 +29,7 @@ class GetUserRepositoryImpl @Inject constructor(
     private val appDatabase: AppDatabase,
     private val networkService: NetworkService
 ): GetUserRepository {
-    override fun getListUser(page: Int, size: Int): Flow<DataResult<List<User>>> {
+    override fun getRemoteUsers(page: Int, size: Int): Flow<DataResult<List<User>>> {
         return flow {
             try {
                 val since = page * size

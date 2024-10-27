@@ -16,7 +16,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.git.admin.R
 import com.git.admin.presenter.theme.AppColor
 import com.git.admin.util.Dimens
-import com.git.admin.util.ScreenUtils.isTablet
 
 @Composable
 fun AppContainerView(

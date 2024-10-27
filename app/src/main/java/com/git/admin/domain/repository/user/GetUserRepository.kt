@@ -2,7 +2,6 @@ package com.git.admin.domain.repository.user
 
 import com.git.admin.data.model.response.DataResult
 import com.git.admin.domain.model.User
-import com.git.admin.domain.model.UserDetail
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -17,7 +16,7 @@ interface GetUserRepository {
      * @return Flow<DataResult<List<User>>>
      * @see User
      */
-    fun getListUser(page: Int, size: Int): Flow<DataResult<List<User>>>
+    fun getRemoteUsers(page: Int, size: Int): Flow<DataResult<List<User>>>
 
     /**
      * Get list user from local database
