@@ -5,6 +5,9 @@
     <string name="empty">""</string>
     <string name="user_detail_title">"User Details"</string>
     <string name="user_detail_save_change">Save</string>
+    <string name="user_detail_follower">"Follower"</string>
+    <string name="user_detail_following">"Following"</string>
+    <string name="user_detail_blog">"Blog"</string>
     <string name="signin">"Sign In"</string>
     <string name="signin_description">""</string>
     <string name="signin_email">"Email Address"</string>

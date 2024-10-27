@@ -15,6 +15,11 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
+/**
+ * Use case for fetching list of users
+ * @param getUserRepository GetUserRepository
+ * @param storeUserRepository StoreUserRepository
+ */
 class GetUsersUseCase @Inject constructor(
     private val getUserRepository: GetUserRepository,
     private val storeUserRepository: StoreUserRepository,

@@ -25,7 +25,7 @@ fun MainApp(
                 router = appRouter
             )
         }
-        appComposable(AppRoute.USER_DASHBOARD) {
+        appComposable(AppRoute.HOME) {
             HomeScreen(
                 windowSize = windowSize,
                 router = appRouter

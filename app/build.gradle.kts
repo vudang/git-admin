@@ -53,11 +53,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_11.toString()
+        jvmTarget = JavaVersion.VERSION_17.toString()
     }
     buildFeatures {
         compose = true
@@ -78,6 +78,53 @@ android {
                 "-opt-in=androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi",
             )
         }
+    }
+
+    tasks.register<Javadoc>("generatePackageJavadoc") {
+        description = "Generates Javadoc for specific package"
+
+        // Cách 1: Sử dụng sourceTree để chỉ định package
+        source(android.sourceSets.getByName("main").java.srcDirs.map { srcDir ->
+            fileTree(srcDir) {
+                include("com/git/admin/domain/usecase/user/*.kt")  // Đường dẫn package cụ thể
+                // Có thể thêm nhiều package
+                // include("com/example/myapp/feature1/**/*.java")
+                // include("com/example/myapp/feature2/**/*.java")
+            }
+        })
+
+        // Cách 2: Sử dụng setIncludes để chỉ định package
+        // source(android.sourceSets.getByName("main").java.srcDirs)
+        // setIncludes(setOf("**/model/**/*.java"))
+
+        classpath = files(android.bootClasspath.joinToString(File.pathSeparator))
+
+        // Cấu hình options
+        (options as StandardJavadocDocletOptions).apply {
+            encoding = "UTF-8"
+            charSet = "UTF-8"
+            author(true)
+            version(true)
+            title = "Package Documentation"
+
+            // Đặt mức độ hiển thị
+            setMemberLevel(JavadocMemberLevel.PROTECTED)
+
+            // Thêm links đến Android API
+            links("https://developer.android.com/reference/")
+
+            // Bỏ qua lỗi Javadoc
+            addStringOption("Xdoclint:none", "-quiet")
+
+            // Sử dụng HTML5
+            addBooleanOption("html5", true)
+        }
+
+        // Không fail khi có lỗi
+        isFailOnError = false
+
+        // Thư mục đầu ra
+        setDestinationDir(file("$buildDir/docs/javadoc-package"))
     }
 }
 

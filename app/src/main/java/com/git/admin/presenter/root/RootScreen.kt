@@ -13,9 +13,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.git.admin.R
 import com.git.admin.domain.model.UiState
-import com.git.admin.presenter.component.AppIcon
 import com.git.admin.presenter.router.AppRoute
 import com.git.admin.presenter.router.AppRouter
 import com.git.admin.presenter.theme.AppColor
@@ -38,7 +36,7 @@ fun MainScreen (
     val uiState by remember { viewModel.uiState }.collectAsState()
 
     fun navigateToHome() {
-        router.push(AppRoute.USER_DASHBOARD)
+        router.push(AppRoute.HOME)
     }
 
     Box(

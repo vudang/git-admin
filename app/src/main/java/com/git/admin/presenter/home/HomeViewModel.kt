@@ -14,25 +14,57 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+/**
+ * The ViewModel for [HomeScreen].
+ * Fetch the user list from data layer and update the UI state based on the fetched data.
+ *
+ * @param getUsersUseCase The [GetUsersUseCase] to fetch the user list from remote.
+ * @param userStream The [MutableUserStream] to update the selected user.
+ */
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val getUsersUseCase: GetUsersUseCase,
     private val userStream: MutableUserStream
 ) : ViewModel() {
 
+    /**
+     * The UI state of the home screen.
+     * The UI state will be updated based on the fetched data.
+     */
     private val _uiState: MutableStateFlow<UiState<List<User>>> = MutableStateFlow(UiState.None)
     val uiState: StateFlow<UiState<List<User>>> = _uiState
 
+    /**
+     * The list of users fetched from data layer.
+     * The list will be updated based on the fetched data.
+     */
     private val _userList: MutableStateFlow<List<User>> = MutableStateFlow(emptyList())
     val userList: StateFlow<List<User>> = _userList
+
+    /**
+     * The page size of the user list for each page.
+     */
     private val _pageSize = 20
 
     init {
-        _uiState.value = UiState.Loading
-        fetchUserList()
+        loadUsersData()
     }
 
-    private fun fetchUserList(query: UserQuery = UserQuery(page = 0, size = _pageSize)) {
+    private fun loadUsersData() {
+        _uiState.value = UiState.Loading
+        processFetchUserList()
+    }
+
+    /**
+     * Fetch the user list from data layer
+     * Update the UI state based on the fetched data
+     * If the user list is fetched, update the UI state to [UiState.Success]
+     * If the user list is not fetched, update the UI state to [UiState.Error]
+     *
+     * @param query The query to fetch the user list
+     * @see UserQuery
+     */
+    private fun processFetchUserList(query: UserQuery = UserQuery(page = 0, size = _pageSize)) {
         viewModelScope.launch {
             getUsersUseCase.execute(query).collect {
                 _uiState.value = it
@@ -43,12 +75,24 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Load more users when scrolled to bottom
+     * Calculate the page based on the current user list size
+     * And then fetch the user list based on the calculated page
+     */
     fun loadMoreUsers() {
         val page = _userList.value.size / _pageSize
         val query = UserQuery(page = page, size = _pageSize)
-        fetchUserList(query)
+        processFetchUserList(query)
     }
 
+    /**
+     * Navigate to user detail screen when user is selected
+     * Update the selected user in [UserStream]
+     *
+     * @param user The selected user
+     * @see User
+     */
     fun onSelectedUser(user: User) {
         AppLogger.logD("Selected user: ${user.login}")
         userStream.update(user)

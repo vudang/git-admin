@@ -2,13 +2,13 @@ package com.git.admin.presenter.router
 
 enum class AppRoute {
     ROOT,
-    USER_DASHBOARD,
+    HOME,
     USER_DETAIL;
 
     fun getName(): String {
         return when(this) {
             ROOT -> "root"
-            USER_DASHBOARD -> "home"
+            HOME -> "home"
             USER_DETAIL -> "user_detail"
         }
     }

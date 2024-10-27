@@ -1,5 +1,6 @@
 package com.git.admin.presenter.home
 
+import android.text.Highlights
 import androidx.compose.foundation.background
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -19,14 +20,15 @@ import com.git.admin.util.Dimens
 
 @Composable
 fun UserCell(
-    user: User,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    avatarUrl: String?,
+    name: String?,
+    highlights: @Composable (() -> Unit)? = null,
 ) {
     Card(
         modifier = modifier
             .fillMaxWidth()
             .background(AppColor.White)
-            .padding(horizontal = Dimens.dp20)
             .padding(vertical = Dimens.dp10),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         colors = CardDefaults.cardColors(
@@ -48,24 +50,22 @@ fun UserCell(
                     .clip(CircleShape)
                     .background(AppColor.GrayLight)
             ) {
-                AppImageLoader(imageUrl = user.avatarUrl ?: "")
+                AppImageLoader(imageUrl = avatarUrl ?: "")
             }
 
             Spacer(modifier = Modifier.width(16.dp))
 
             Column {
                 AppText(
-                    rawText = user.login ?: "",
-                    size = Dimens.sp24,
+                    rawText = name ?: "",
+                    size = Dimens.sp20,
                     color = AppColor.Black,
                     weight = FontWeight.Bold,
                 )
                 Spacer(modifier = Modifier.height(4.dp))
-                AppText(
-                    rawText = user.htmlUrl,
-                    size = 16.sp,
-                    color = AppColor.Blue
-                )
+                if (highlights != null) {
+                    highlights()
+                }
             }
         }
     }

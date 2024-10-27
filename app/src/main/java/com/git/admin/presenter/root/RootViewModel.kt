@@ -9,6 +9,13 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+/**
+ * The ViewModel for [RootScreen].
+ * Fetch the current user from data layer and update the UI state based on the fetched data.
+ * TODO: We can add more business logic here like fetch app's config, use data before load the the main app.
+ *
+ * @param authenticatedStream The [MutableUserStream] to fetch the current user.
+ */
 @HiltViewModel
 class RootViewModel @Inject constructor(
     private val authenticatedStream: MutableUserStream

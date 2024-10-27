@@ -15,6 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.git.admin.domain.model.UiState
 import com.git.admin.domain.model.User
@@ -113,17 +114,27 @@ private fun ListUsers(
     }
 
     LazyColumn(
-        modifier = Modifier.padding(paddingValues),
+        modifier = Modifier
+            .padding(paddingValues)
+            .padding(horizontal = Dimens.dp20),
         state = listState
     ) {
         items(
             users,
         ) { user ->
             UserCell(
-                user = user,
                 modifier = Modifier.clickable {
                     viewModel.onSelectedUser(user)
                     selectedUser()
+                },
+                avatarUrl = user.avatarUrl,
+                name = user.login,
+                highlights = {
+                    AppText(
+                        rawText = user.htmlUrl,
+                        size = 16.sp,
+                        color = AppColor.Blue
+                    )
                 }
             )
         }
