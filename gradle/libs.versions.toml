@@ -2,11 +2,13 @@
 compileSdk = "34"
 composeWebviewVersion = "0.33.6"
 hiltLifecycleViewmodelVersion = "1.0.0-alpha03"
+kotlinTestVersion = "1.9.0"
 kotlinxCoroutinesTestVersion = "1.6.4"
 lifecycleViewmodelComposeVersion = "2.4.0"
 minSdk = "24"
 mockitoCoreVersion = "3.12.4"
 mockitoKotlinVersion = "4.0.0"
+mockk = "1.13.8"
 stripeAndroidVersion = "20.48.4"
 targetSdk = "34"
 versionCode = "4"
@@ -63,6 +65,7 @@ androidx-navigation-compose = { group = "androidx.navigation", name = "navigatio
 # TEST
 #noinspection SimilarGradleDependency
 junit = { group = "junit", name = "junit", version.ref = "junit" }
+kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlinTestVersion" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTestVersion" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -72,6 +75,7 @@ androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit
 # REMOTE
 mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockitoCoreVersion" }
 mockito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version.ref = "mockitoKotlinVersion" }
+mockk-mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 retrofit2-retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 retrofit2-converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
 retrofit2-adapter-rxjava2 = { group = "com.squareup.retrofit2", name = "adapter-rxjava2", version.ref = "retrofit" }

@@ -45,20 +45,17 @@ class GetUsersUseCase @Inject constructor(
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun execute(params: UserQuery): Flow<UiState<List<User>>> {
         val localFlow = getUsersFromLocalDatabase(params)
-        val remoteFlow = getUsersFromRemote(params)
         return localFlow
             .flatMapConcat { dataResult ->
                 when (dataResult) {
                     is DataResult.Success<List<User>> -> {
                         if (dataResult.data.isEmpty()) {
-                            AppLogger.logD("[GetUsersUseCase]: No local data, fetching remote data")
-                            remoteFlow
+                            getUsersFromRemote(params)
                         } else {
-                            AppLogger.logD("[GetUsersUseCase]: Local data found, returning local data")
                             flowOf(dataResult)
                         }
                     }
-                    else -> remoteFlow
+                    else -> getUsersFromRemote(params)
                 }
             }
             .flatMapConcat { dataResult ->

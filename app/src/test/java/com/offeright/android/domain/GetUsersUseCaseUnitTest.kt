@@ -7,49 +7,73 @@ import com.git.admin.domain.repository.user.GetUserRepository
 import com.git.admin.domain.repository.user.StoreUserRepository
 import com.git.admin.domain.usecase.user.GetUsersUseCase
 import com.offeright.android.fake_data.UserFake
+import io.mockk.coEvery
+import io.mockk.mockk
+import io.mockk.verify
 import junit.framework.TestCase.assertEquals
+import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Mockito.mock
-import org.mockito.Mockito.verify
-import org.mockito.kotlin.whenever
 
 class GetUsersUseCaseUnitTest {
-    private lateinit var getUsersRepository: GetUserRepository
+    private lateinit var getUserRepository: GetUserRepository
     private lateinit var storeUserRepository: StoreUserRepository
     private lateinit var getUsersUseCase: GetUsersUseCase
-    private val query = UserQuery(0, 20)
+
+    // Test data
+    private val mockUsers = listOf(UserFake.user, UserFake.user)
+    private val userQuery = UserQuery(0, 20)
+
 
     @Before
     fun setup() {
-        getUsersRepository = mock(GetUserRepository::class.java)
-        storeUserRepository = mock(StoreUserRepository::class.java)
-        getUsersUseCase = GetUsersUseCase(getUsersRepository, storeUserRepository)
+        getUserRepository = mockk()
+        storeUserRepository = mockk()
+        getUsersUseCase = GetUsersUseCase(getUserRepository, storeUserRepository)
     }
 
     @Test
-    fun `execute should return list of users when successful`() = runTest {
+    fun `when local data exists, return local data without fetching remote`() = runTest {
         // Given
-        val users = listOf(UserFake.user)
-
-        // Mock
-        whenever(getUsersRepository.getLocalUsers(query.page, query.size)).thenReturn(
-            flowOf(DataResult.Success(users))
-        )
-        whenever(getUsersRepository.getRemoteUsers(query.page, query.size)).thenReturn(
-            flowOf(DataResult.Success(emptyList()))
-        )
+        coEvery { getUserRepository.getLocalUsers(userQuery.page, userQuery.size) } returns flowOf(DataResult.Success(mockUsers))
+        coEvery { getUserRepository.getRemoteUsers(userQuery.page, userQuery.size) } returns flowOf(DataResult.Success(emptyList()))
+        coEvery { storeUserRepository.storeUsers(any()) } returns flowOf(DataResult.Success(Unit))
 
         // When
-        val result = getUsersUseCase.execute(query).toList()
+        val result = getUsersUseCase.execute(userQuery).toList()
 
         // Then
         assertEquals(1, result.size)
-        assertEquals(UiState.Success(users), result.first())
-        verify(getUsersRepository).getLocalUsers(query.page, query.size)
+        assertTrue(result[0] is UiState.Success)
+        assertEquals(mockUsers, (result[0] as UiState.Success).data)
+
+        // Verify repository calls
+        verify(exactly = 1) { getUserRepository.getLocalUsers(userQuery.page, userQuery.size) }
+        verify(exactly = 1) { storeUserRepository.storeUsers(mockUsers) }
+        verify(exactly = 0) { getUserRepository.getRemoteUsers(userQuery.page, userQuery.size) }
     }
 
+    @Test
+    fun `when local data is empty, fetch from remote`() = runTest {
+        // Given
+        coEvery { getUserRepository.getLocalUsers(userQuery.page, userQuery.size) } returns flowOf(DataResult.Success(emptyList()))
+        coEvery { getUserRepository.getRemoteUsers(userQuery.page, userQuery.size) } returns flowOf(DataResult.Success(mockUsers))
+        coEvery { storeUserRepository.storeUsers(any()) } returns flowOf(DataResult.Success(Unit))
+
+        // When
+        val result = getUsersUseCase.execute(userQuery).toList()
+
+        // Then
+        assertEquals(1, result.size)
+        assertTrue(result[0] is UiState.Success)
+        assertEquals(mockUsers, (result[0] as UiState.Success).data)
+
+        // Verify repository calls
+        verify(exactly = 1) { getUserRepository.getLocalUsers(userQuery.page, userQuery.size) }
+        verify(exactly = 1) { getUserRepository.getRemoteUsers(userQuery.page, userQuery.size) }
+        verify(exactly = 1) { storeUserRepository.storeUsers(mockUsers) }
+    }
 }
