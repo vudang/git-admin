@@ -5,6 +5,12 @@ import okhttp3.Response
 
 /** Created by Tony on 12/16/2024. */
 
+/**
+ * Interceptor for adding Authorization header to the request
+ *
+ * @param token lambda function to get the token
+ * @see Interceptor
+ */
 class AuthInterceptor(
     private val token: () -> String?
 ) : Interceptor {

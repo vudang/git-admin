@@ -12,6 +12,18 @@ import retrofit2.HttpException
 import javax.inject.Inject
 import javax.inject.Singleton
 
+/**
+ * Implementation of [GetUserRepository] interface
+ * Fetch user from network service
+ * Return [DataResult] of [List<User>]
+ *
+ * @param appDatabase instance of [AppDatabase]
+ * @param networkService instance of [NetworkService]
+ * @constructor Create empty Get user repository impl
+ * @see GetUserRepository
+ * @see AppDatabase
+ * @see NetworkService
+ */
 @Singleton
 class GetUserRepositoryImpl @Inject constructor(
     private val appDatabase: AppDatabase,

@@ -9,6 +9,13 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
+/**
+ * UserStreamModule for providing stream instance
+ * Provide instance of UserStream using Dagger
+ *
+ * @see MutableUserStream
+ * @see UserStreamImpl
+ */
 @Module
 @InstallIn(SingletonComponent::class)
 object UserStreamModule {

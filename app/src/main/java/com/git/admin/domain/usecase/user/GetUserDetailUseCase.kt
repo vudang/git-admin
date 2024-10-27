@@ -15,6 +15,11 @@ import javax.inject.Inject
  * Fetch user detail from remote
  * Return the fetched data
  * Return error if username is empty
+ *
+ * @param getUserRepository GetUserDetailRepository
+ * @see GetUserDetailRepository
+ * @see User
+ * @see UserDetail
  */
 
 class GetUserDetailUseCase @Inject constructor(

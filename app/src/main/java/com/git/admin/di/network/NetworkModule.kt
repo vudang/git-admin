@@ -17,6 +17,18 @@ import javax.inject.Singleton
 
 /** Created by Tony on 12/16/2024. */
 
+/**
+ * Network module for providing network instance
+ * Provide instance of NetworkService using Dagger
+ * Add interceptor for logging and authentication
+ *
+ * @see AuthInterceptor
+ * @see HttpLoggingInterceptor
+ * @see OkHttpClient
+ * @see GsonConverterFactory
+ * @see Retrofit
+ * @see NetworkService
+ */
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule{

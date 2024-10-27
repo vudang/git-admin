@@ -12,6 +12,16 @@ import retrofit2.HttpException
 import javax.inject.Inject
 import javax.inject.Singleton
 
+/**
+ * Implementation of [StoreUserRepository] interface
+ * Store user to local database
+ * Return [DataResult] of [Unit]
+ *
+ * @param appDatabase instance of [AppDatabase]
+ * @constructor Create empty Store user repository impl
+ * @see StoreUserRepository
+ * @see AppDatabase
+ */
 @Singleton
 class StoreUserRepositoryImpl @Inject constructor(
     private val appDatabase: AppDatabase,

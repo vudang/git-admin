@@ -24,10 +24,14 @@ class RootViewModel @Inject constructor(
     val uiState: MutableStateFlow<UiState<Boolean>> = _uiState
 
     init {
-        loadCurrentUser()
+        loadCurrentAuthState()
     }
 
-    private fun loadCurrentUser() {
+    /**
+     * TODO: Add more business logic here like fetch app's config, use data before load the the main app.
+     * This is just a placeholder to fetch the current user auth state.
+     */
+    private fun loadCurrentAuthState() {
         _uiState.value = UiState.Loading
         viewModelScope.launch {
             _uiState.value = UiState.Success(true)

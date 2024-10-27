@@ -17,8 +17,14 @@ import javax.inject.Inject
 
 /**
  * Use case for fetching list of users
+ * Fetch list of users from local database, if not found fetch from remote
+ * Store the fetched data to local database
+ * Return the fetched data
+ *
  * @param getUserRepository GetUserRepository
  * @param storeUserRepository StoreUserRepository
+ * @see GetUserRepository
+ * @see StoreUserRepository
  */
 class GetUsersUseCase @Inject constructor(
     private val getUserRepository: GetUserRepository,
@@ -34,6 +40,7 @@ class GetUsersUseCase @Inject constructor(
      * @param params UserQuery
      * @return Flow<UiState<List<User>>> Flow of UiState
      * @see UserQuery
+     * @see User
      */
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun execute(params: UserQuery): Flow<UiState<List<User>>> {

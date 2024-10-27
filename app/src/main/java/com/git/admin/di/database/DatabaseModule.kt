@@ -14,6 +14,14 @@ import javax.inject.Singleton
 
 /** Created by Tony on 12/27/2024. */
 
+/**
+ * Database module for providing database instance
+ * Provide instance of AppDatabase using Dagger
+ * Add migration strategy for database versioning
+ *
+ * @param context Context of application
+ * @see AppDatabase
+ */
 @Module
 @InstallIn(SingletonComponent::class)
 object DatabaseModule {

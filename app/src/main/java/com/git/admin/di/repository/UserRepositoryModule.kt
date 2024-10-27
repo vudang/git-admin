@@ -12,7 +12,15 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
-
+/**
+ * UserRepositoryModule for providing repository instance
+ * Provide instance of GetUserRepository and StoreUserRepository using Dagger
+ *
+ * @see GetUserRepository
+ * @see GetUserRepositoryImpl
+ * @see StoreUserRepository
+ * @see StoreUserRepositoryImpl
+ */
 @Module
 @InstallIn(SingletonComponent::class)
 object UserRepositoryModule {

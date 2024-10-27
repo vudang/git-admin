@@ -5,7 +5,27 @@ import com.git.admin.domain.model.User
 import com.git.admin.domain.model.UserDetail
 import kotlinx.coroutines.flow.Flow
 
+/**
+ * Interface for get user repository
+ */
 interface GetUserRepository {
+    /**
+     * Get list user from remote
+     *
+     * @param page page number
+     * @param size size of page
+     * @return Flow<DataResult<List<User>>>
+     * @see User
+     */
     fun getListUser(page: Int, size: Int): Flow<DataResult<List<User>>>
+
+    /**
+     * Get list user from local database
+     *
+     * @param page page number
+     * @param size size of page
+     * @return Flow<DataResult<List<User>>>
+     * @see User
+     */
     fun getLocalUsers(page: Int, size: Int): Flow<DataResult<List<User>>>
 }

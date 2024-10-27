@@ -10,6 +10,12 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 
+/**
+ * UserDetailUseCaseModule for providing use case instance
+ * Provide instance of GetUserDetailUseCase using Dagger
+ *
+ * @see GetUserDetailUseCase
+ */
 @Module
 @InstallIn(ViewModelComponent::class)
 object UserDetailUseCaseModule {
