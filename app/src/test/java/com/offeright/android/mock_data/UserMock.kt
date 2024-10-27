@@ -1,8 +1,8 @@
-package com.offeright.android.fake_data
+package com.offeright.android.mock_data
 
 import com.git.admin.domain.model.User
 
-object UserFake {
+object UserMock {
     // Init user instance with this json data
     // {
     //    "login": "defunkt",

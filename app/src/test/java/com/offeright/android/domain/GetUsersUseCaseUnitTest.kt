@@ -7,7 +7,7 @@ import com.git.admin.domain.model.UserQuery
 import com.git.admin.domain.repository.user.GetUserRepository
 import com.git.admin.domain.repository.user.StoreUserRepository
 import com.git.admin.domain.usecase.user.GetUsersUseCase
-import com.offeright.android.fake_data.UserFake
+import com.offeright.android.mock_data.UserMock
 import io.mockk.coEvery
 import io.mockk.mockk
 import io.mockk.verify
@@ -25,7 +25,7 @@ class GetUsersUseCaseUnitTest {
     private lateinit var getUsersUseCase: GetUsersUseCase
 
     // Test data
-    private val mockUsers = listOf(UserFake.user, UserFake.user)
+    private val mockUsers = listOf(UserMock.user, UserMock.user)
     private val userQuery = UserQuery(0, 20)
 
 

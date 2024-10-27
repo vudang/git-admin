@@ -1,5 +1,7 @@
 package com.git.admin.domain.usecase.user
 
+import com.git.admin.data.model.base.APIError
+import com.git.admin.data.model.base.ErrorCode
 import com.git.admin.domain.model.UiState
 import com.git.admin.domain.model.User
 import com.git.admin.domain.model.UserDetail
@@ -39,7 +41,7 @@ class GetUserDetailUseCase @Inject constructor(
     override fun execute(params: User): Flow<UiState<UserDetail>> {
         val userName = params.login
         if (userName.isNullOrEmpty()) {
-            return flowOf(UiState.Error("Username is empty"))
+            return flowOf(UiState.Error("Username is empty", errorCode = ErrorCode.INVALID_REQUEST))
         }
 
         return getUserRepository.getUserDetail(userName)

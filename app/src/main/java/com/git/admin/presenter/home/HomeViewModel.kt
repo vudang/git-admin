@@ -94,7 +94,6 @@ class HomeViewModel @Inject constructor(
      * @see User
      */
     fun onSelectedUser(user: User) {
-        AppLogger.logD("Selected user: ${user.login}")
         userStream.update(user)
     }
 }
