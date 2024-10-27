@@ -51,6 +51,7 @@ class UserDetailViewModel @Inject constructor(
      */
     @OptIn(ExperimentalCoroutinesApi::class)
     private fun fetchUserDetail() {
+        _uiState.value = UiState.Loading
         viewModelScope.launch {
             userStream.userFlow
                 .flatMapConcat { user ->
