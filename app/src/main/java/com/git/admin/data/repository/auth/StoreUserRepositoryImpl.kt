@@ -5,8 +5,10 @@ import com.git.admin.data.model.response.DataResult
 import com.git.admin.domain.model.User
 import com.git.admin.domain.model.toStore
 import com.git.admin.domain.repository.user.StoreUserRepository
+import com.git.admin.util.handleAPIError
 import com.git.admin.util.mapToAPIError
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import retrofit2.HttpException
 import javax.inject.Inject
@@ -29,15 +31,13 @@ class StoreUserRepositoryImpl @Inject constructor(
 
     override fun storeUsers(users: List<User>): Flow<DataResult<Unit>> {
         return flow {
-            try {
-                val userStore = users.map { it.toStore() }
-                appDatabase.userDAO().insertUsers(userStore)
-                emit(DataResult.Success(Unit))
-            } catch (e: HttpException) {
-                emit(DataResult.Error(e.mapToAPIError()))
-            } catch (e: Exception) {
-                emit(DataResult.Error(e.mapToAPIError()))
-            }
+            val userStore = users.map { it.toStore() }
+            appDatabase.userDAO().insertUsers(userStore)
+            val result: DataResult<Unit> = DataResult.Success(Unit)
+            emit(result)
+        }.catch { e ->
+            val apiError = e.handleAPIError()
+            emit(DataResult.Error(apiError))
         }
     }
 }

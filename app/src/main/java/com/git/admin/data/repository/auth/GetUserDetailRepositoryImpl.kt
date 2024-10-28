@@ -3,8 +3,10 @@ import com.git.admin.data.datasource.remote.NetworkService
 import com.git.admin.data.model.response.DataResult
 import com.git.admin.domain.model.UserDetail
 import com.git.admin.domain.repository.user.GetUserDetailRepository
+import com.git.admin.util.handleAPIError
 import com.git.admin.util.mapToAPIError
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import retrofit2.HttpException
 import javax.inject.Inject
@@ -26,14 +28,12 @@ class GetUserDetailRepositoryImpl @Inject constructor(
 ): GetUserDetailRepository {
     override fun getUserDetail(username: String): Flow<DataResult<UserDetail>> {
         return flow {
-            try {
-                val response = networkService.getUserDetail(username)
-                emit(DataResult.Success(response.toModel()))
-            } catch (e: HttpException) {
-                emit(DataResult.Error(e.mapToAPIError()))
-            } catch (e: Exception) {
-                emit(DataResult.Error(e.mapToAPIError()))
-            }
+            val response = networkService.getUserDetail(username)
+            val result: DataResult<UserDetail> = DataResult.Success(response.toModel())
+            emit(result)
+        }.catch { e ->
+            val apiError = e.handleAPIError()
+            emit(DataResult.Error(apiError))
         }
     }
 }

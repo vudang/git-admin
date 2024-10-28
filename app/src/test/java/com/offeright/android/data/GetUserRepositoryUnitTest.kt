@@ -3,14 +3,13 @@ package com.offeright.android.data
 
 import com.git.admin.data.datasource.local.db.AppDatabase
 import com.git.admin.data.datasource.local.db.dao.UserDao
+import com.git.admin.data.datasource.local.db.entity.user.UserStore
 import com.git.admin.data.datasource.remote.NetworkService
 import com.git.admin.data.model.response.DataResult
-import com.git.admin.data.model.response.UserResponse
 import com.git.admin.domain.model.User
 import com.git.admin.data.model.response.UserEntity
 import com.git.admin.data.repository.auth.GetUserRepositoryImpl
 import io.mockk.*
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
@@ -21,7 +20,6 @@ import retrofit2.Response
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class GetUserRepositoryImplTest {
 
     private lateinit var repository: GetUserRepositoryImpl
@@ -53,13 +51,13 @@ class GetUserRepositoryImplTest {
         val since = page * size
 
         val userResponses = listOf(
-            UserResponse(
+            UserEntity(
                 id = 1,
                 login = "user1",
                 avatarUrl = "https://example.com/avatar1.jpg",
                 type = "User"
             ),
-            UserResponse(
+            UserEntity(
                 id = 2,
                 login = "user2",
                 avatarUrl = "https://example.com/avatar2.jpg",
@@ -83,7 +81,7 @@ class GetUserRepositoryImplTest {
 
         // Then
         assertTrue(result is DataResult.Success)
-        assertEquals(expectedUsers, (result as DataResult.Success).data)
+        assertEquals(expectedUsers, result.data)
         coVerify { networkService.getListUser(size, since) }
     }
 
@@ -129,14 +127,14 @@ class GetUserRepositoryImplTest {
         val page = 0
         val size = 20
 
-        val userEntities = listOf(
-            UserEntity(
+        val userEntities = mutableListOf(
+            UserStore(
                 id = 1,
                 login = "user1",
                 avatarUrl = "https://example.com/avatar1.jpg",
                 type = "User"
             ),
-            UserEntity(
+            UserStore(
                 id = 2,
                 login = "user2",
                 avatarUrl = "https://example.com/avatar2.jpg",
@@ -160,7 +158,7 @@ class GetUserRepositoryImplTest {
 
         // Then
         assertTrue(result is DataResult.Success)
-        assertEquals(expectedUsers, (result as DataResult.Success).data)
+        assertEquals(expectedUsers, result.data)
         coVerify {
             appDatabase.userDAO()
             userDao.getUsers(page, size)
@@ -200,7 +198,7 @@ class GetUserRepositoryImplTest {
 
         // Then
         assertTrue(result is DataResult.Success)
-        assertEquals(emptyList(), (result as DataResult.Success).data)
+        assertEquals(emptyList(), result.data)
         coVerify {
             appDatabase.userDAO()
             userDao.getUsers(page, size)

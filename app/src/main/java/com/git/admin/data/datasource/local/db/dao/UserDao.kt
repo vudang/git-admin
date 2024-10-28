@@ -13,7 +13,7 @@ import com.git.admin.data.datasource.local.db.entity.user.UserStore
 @Dao
 interface UserDao {
     @Query("SELECT * FROM ${AppTable.USER} LIMIT :size OFFSET :size * :page")
-    suspend fun getUsers(page: Int, size: Int): MutableList<UserStore>
+    suspend fun getUsers(page: Int, size: Int): List<UserStore>
 
     @Query("SELECT * FROM ${AppTable.USER} WHERE id=:id")
     suspend fun getUserById(id: Int): UserStore
