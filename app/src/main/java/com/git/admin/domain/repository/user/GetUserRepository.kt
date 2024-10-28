@@ -13,8 +13,11 @@ interface GetUserRepository {
      *
      * @param page page number
      * @param size size of page
-     * @return Flow<DataResult<List<User>>>
+     * if [DataResult.Success] return list of [User]
+     * if [DataResult.Error] return [APIError]
      * @see User
+     * @see DataResult
+     * @see APIError
      */
     fun getRemoteUsers(page: Int, size: Int): Flow<DataResult<List<User>>>
 
@@ -23,8 +26,11 @@ interface GetUserRepository {
      *
      * @param page page number
      * @param size size of page
-     * @return Flow<DataResult<List<User>>>
+     * if [DataResult.Success] return list of [User]
+     * if [DataResult.Error] return [APIError]
      * @see User
+     * @see DataResult
+     * @see APIError
      */
     fun getLocalUsers(page: Int, size: Int): Flow<DataResult<List<User>>>
 }

@@ -1,20 +1,13 @@
 package com.git.admin.data.repository.auth
 import com.git.admin.data.datasource.local.db.AppDatabase
 import com.git.admin.data.datasource.remote.NetworkService
-import com.git.admin.data.model.base.APIError
-import com.git.admin.data.model.base.ErrorCode
 import com.git.admin.data.model.response.DataResult
 import com.git.admin.domain.model.User
-import com.git.admin.domain.model.UserDetail
 import com.git.admin.domain.repository.user.GetUserRepository
 import com.git.admin.util.handleAPIError
-import com.git.admin.util.mapToAPIError
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
-import retrofit2.HttpException
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -35,6 +28,17 @@ class GetUserRepositoryImpl @Inject constructor(
     private val appDatabase: AppDatabase,
     private val networkService: NetworkService
 ): GetUserRepository {
+    /**
+     * Get list user from remote
+     *
+     * @param page page number
+     * @param size size of page
+     * if [DataResult.Success] return list of [User]
+     * if [DataResult.Error] return [APIError]
+     * @see User
+     * @see DataResult
+     * @see APIError
+     */
     override fun getRemoteUsers(page: Int, size: Int): Flow<DataResult<List<User>>> {
         return flow {
             val since = page * size
@@ -47,6 +51,17 @@ class GetUserRepositoryImpl @Inject constructor(
         }
     }
 
+    /**
+     * Get list user from local database
+     *
+     * @param page page number
+     * @param size size of page
+     * if [DataResult.Success] return list of [User]
+     * if [DataResult.Error] return [APIError]
+     * @see User
+     * @see DataResult
+     * @see APIError
+     */
     override fun getLocalUsers(page: Int, size: Int): Flow<DataResult<List<User>>> {
         return flow {
             val response = appDatabase.userDAO().getUsers(page, size)

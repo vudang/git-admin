@@ -29,6 +29,16 @@ class StoreUserRepositoryImpl @Inject constructor(
     private val appDatabase: AppDatabase,
 ): StoreUserRepository {
 
+    /**
+     * Store list user to local database
+     *
+     * @param users list of user
+     * if [DataResult.Success] return [Unit]
+     * if [DataResult.Error] return [APIError]
+     * @see User
+     * @see DataResult
+     * @see APIError
+     */
     override fun storeUsers(users: List<User>): Flow<DataResult<Unit>> {
         return flow {
             val userStore = users.map { it.toStore() }

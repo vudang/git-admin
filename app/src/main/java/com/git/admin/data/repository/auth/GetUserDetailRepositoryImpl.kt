@@ -26,6 +26,16 @@ import javax.inject.Singleton
 class GetUserDetailRepositoryImpl @Inject constructor(
     private val networkService: NetworkService
 ): GetUserDetailRepository {
+    /**
+     * Get user detail by username
+     *
+     * @param username username of user
+     * if [DataResult.Success] return [UserDetail]
+     * if [DataResult.Error] return [APIError]
+     * @see UserDetail
+     * @see DataResult
+     * @see APIError
+     */
     override fun getUserDetail(username: String): Flow<DataResult<UserDetail>> {
         return flow {
             val response = networkService.getUserDetail(username)
