@@ -9,7 +9,7 @@
     - [c. View Unit test report](#viewunittestreport)
     - [d. TODO](#todo)
 
-# 1. Technical
+## 1. Technical
 	- Implement the project using `Clean Architecture` principles.
 	- Utilize Android `Jetpack Compose` for building the user interface.
 	- Employ `Kotlin Coroutines Flow` to manage data flow.
@@ -18,7 +18,7 @@
 	- Apply `MockK` and `JUnit` for unit testing.
 	- Utilize `JaCoCo` to generate unit test coverage reports.
 
-# 2. Architecture
+## 2. Architecture
 ### a. Overview
 ![Diagram](Document/Architecture.png)
 
@@ -51,21 +51,21 @@
 - `NetworkService` manages all requests to network APIs.
 - `LocalDBService` manages storing/getting/updating user data to the local disk.
 
-# 3. Unit test
-## a. Run Unit tests
+## 3. Unit test
+### a. Run Unit tests
 Open `Gradle Tool` on the right side of the Android Studio IDE (see screenshot below) and double click on it
 ![Diagram](Document/Unit-test-run.png)
 
-## b. Unit test report
+### b. Unit test report
 Find the Unit test report at the path `build/reports/tests/testDevDebugUnitTest/index.html` (see screenshot below)
 ![Diagram](Document/Unit-test-build-result.png)
 
-## c. View Unit test report
+### c. View Unit test report
 Open the file `index.html` above to see the report detail. 
 The screenshot below is the result
 ![Diagram](Document/Unit-test-report.png)
 
-## d. TODO
+### d. TODO
 - Currently, we implement unit test to cover the `Domain` and `Data` layer to cover logic of our code. 
 - However, We still need to add more unitest for
     + `ViewModel`: Test the coordination logic and state management of the ViewModel without relying on the UI. Ensure that UI states (such as loading, success, error) are updated correctly.
