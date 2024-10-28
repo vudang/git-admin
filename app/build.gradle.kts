@@ -3,6 +3,35 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     id("dagger.hilt.android.plugin")
     id("kotlin-kapt")
+    id("jacoco")
+}
+
+jacoco {
+    toolVersion = "0.8.7"
+}
+
+tasks.register("jacocoTestReport", JacocoReport::class) {
+    dependsOn("testDevDebugUnitTest") // Đảm bảo unit test chạy trước khi đo coverage
+
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+    }
+
+    // Đường dẫn đến file output
+    val fileFilter = listOf("**/R.class", "**/R$*.class", "**/BuildConfig.*", "**/Manifest*.*", "**/*Test*.*")
+
+    val debugTree = fileTree("${layout.buildDirectory}/intermediates/javac/debug") {
+        exclude(fileFilter)
+    }
+
+    val kotlinDebugTree = fileTree("${layout.buildDirectory}/tmp/kotlin-classes/debug") {
+        exclude(fileFilter)
+    }
+
+    sourceDirectories.setFrom(files("src/main/java"))
+    classDirectories.setFrom(files(debugTree, kotlinDebugTree))
+    executionData.setFrom(fileTree(buildDir).include("**/jacoco/testDebugUnitTest.exec"))
 }
 
 android {
