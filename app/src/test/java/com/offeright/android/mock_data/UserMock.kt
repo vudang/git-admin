@@ -1,5 +1,7 @@
 package com.offeright.android.mock_data
 
+import com.git.admin.data.datasource.local.db.entity.user.UserStore
+import com.git.admin.data.model.response.UserEntity
 import com.git.admin.domain.model.User
 
 object UserMock {
@@ -33,5 +35,35 @@ object UserMock {
         avatarUrl = "https://avatars.githubusercontent.com/u/2?v=4",
         gravatarId = "",
         url = "https://api.github.com/users/defunkt"
+    )
+
+    val userResponses = listOf(
+        UserEntity(
+            id = 1,
+            login = "user1",
+            avatarUrl = "https://example.com/avatar1.jpg",
+            type = "User"
+        ),
+        UserEntity(
+            id = 2,
+            login = "user2",
+            avatarUrl = "https://example.com/avatar2.jpg",
+            type = "User"
+        )
+    )
+
+    val userStores = listOf(
+        UserStore(
+            id = 1,
+            login = "user1",
+            avatarUrl = "https://example.com/avatar1.jpg",
+            type = "User"
+        ),
+        UserStore(
+            id = 2,
+            login = "user2",
+            avatarUrl = "https://example.com/avatar2.jpg",
+            type = "User"
+        )
     )
 }
