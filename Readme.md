@@ -1,13 +1,13 @@
 # Git administrator
 
 ## Table of Contents
-- [1. Technical](#Technical)
-- [2. Architecture](#Architecture)
-- [3. Unit test](#Unittest)
-        [a. Run Unit tests](#Rununittests)
-        [b. Unit test report](#Unittestreport)
-        [c. View Unit test report](#Viewunittestreport)
-        [d. TODO](#TODO)
+- [1. Technical](#technical)
+- [2. Architecture](#architecture)
+- [3. Unit test](#unittest)
+    - [a. Run Unit tests](#rununittests)
+    - [b. Unit test report](#unittestreport)
+    - [c. View Unit test report](#viewunittestreport)
+    - [d. TODO](#todo)
 
 # 1. Technical
 	- Implement the project using `Clean Architecture` principles.
