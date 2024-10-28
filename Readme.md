@@ -1,3 +1,14 @@
+# Git administrator
+
+## Table of Contents
+- [1. Technical](#Technical)
+- [2. Architecture](#Architecture)
+- [3. Unit test](#Unittest)
+        [a. Run Unit tests](#Rununittests)
+        [b. Unit test report](#Unittestreport)
+        [c. View Unit test report](#Viewunittestreport)
+        [d. TODO](#TODO)
+
 # 1. Technical
 	- Implement the project using `Clean Architecture` principles.
 	- Utilize Android `Jetpack Compose` for building the user interface.
